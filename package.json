@@ -4,6 +4,10 @@
   "description": "Bundle an npm package into a browser-ready global script",
   "license": "ISC",
   "author": "Pratik Pathak",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zpratikpathak/mjs-to-browser"
+  },
   "type": "commonjs",
   "bin": {
     "mjs-to-browser": "bin/mjs-to-browser.js"

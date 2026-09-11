@@ -25,36 +25,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Detect version change
+      - name: Read package metadata
         id: version
-        env:
-          BEFORE_SHA: ${{ github.event.before }}
-          EVENT_NAME: ${{ github.event_name }}
         run: |
           node <<'NODE'
           const fs = require('node:fs');
-          const { execFileSync } = require('node:child_process');
-
           const manifest = require('./package.json');
-          let previousVersion = '';
-
-          if (process.env.EVENT_NAME !== 'workflow_dispatch' && process.env.BEFORE_SHA) {
-            try {
-              const previousManifest = execFileSync(
-                'git',
-                ['show', `${process.env.BEFORE_SHA}:package.json`],
-                { encoding: 'utf8' },
-              );
-              previousVersion = JSON.parse(previousManifest).version;
-            } catch {
-              previousVersion = '';
-            }
-          }
-
-          const changed = process.env.EVENT_NAME === 'workflow_dispatch'
-            || manifest.version !== previousVersion;
           fs.appendFileSync(process.env.GITHUB_OUTPUT, [
-            `changed=${changed}`,
             `name=${manifest.name}`,
             `version=${manifest.version}`,
             `tag=v${manifest.version}`,
@@ -63,7 +40,6 @@ jobs:
           NODE
 
       - name: Set up Node.js
-        if: steps.version.outputs.changed == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -71,15 +47,12 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        if: steps.version.outputs.changed == 'true'
         run: npm ci
 
       - name: Run tests
-        if: steps.version.outputs.changed == 'true'
         run: npm test
 
       - name: Check npm publication
-        if: steps.version.outputs.changed == 'true'
         id: npm
         env:
           PACKAGE_NAME: ${{ steps.version.outputs.name }}
@@ -92,11 +65,10 @@ jobs:
           fi
 
       - name: Publish to npm
-        if: steps.version.outputs.changed == 'true' && steps.npm.outputs.published != 'true'
+        if: steps.npm.outputs.published != 'true'
         run: npm publish --access public --provenance
 
       - name: Create GitHub release
-        if: steps.version.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ steps.version.outputs.tag }}
