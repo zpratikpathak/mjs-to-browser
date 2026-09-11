@@ -1,4 +1,4 @@
-# mjs-to-js
+# mjs-to-browser
 
 Bundle one exact npm package version into a minified browser script and expose its preferred export on `globalThis`.
 
@@ -7,7 +7,7 @@ Bundle one exact npm package version into a minified browser script and expose i
 Run without installing globally:
 
 ```sh
-npx mjs-to-js fuse.js@7.5.0
+npx mjs-to-browser fuse.js@7.5.0
 ```
 
 This creates `fuse.js.min.js` in the current directory and exposes `globalThis.Fuse`:
@@ -24,7 +24,7 @@ Only exact npm registry versions are accepted. Tags, ranges, aliases, git URLs, 
 ## Options
 
 ```text
-Usage: mjs-to-js <name@exact-version> [options]
+Usage: mjs-to-browser <name@exact-version> [options]
 
 Options:
   -o, --output <path>  Output path (default: <package>.min.js)
@@ -36,14 +36,14 @@ Options:
 Scoped package names produce filesystem-safe output names:
 
 ```sh
-npx mjs-to-js @scope/my-lib@1.2.3
+npx mjs-to-browser @scope/my-lib@1.2.3
 # Creates scope-my-lib.min.js and exposes globalThis.MyLib
 ```
 
 Override either inferred value when a package uses different branding:
 
 ```sh
-npx mjs-to-js package-name@1.2.3 -o "vendor/package.js" --global PackageAPI
+npx mjs-to-browser package-name@1.2.3 -o "vendor/package.js" --global PackageAPI
 ```
 
 Existing output files are never replaced unless `--force` is provided.

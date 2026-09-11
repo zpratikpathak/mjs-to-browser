@@ -14,7 +14,7 @@ for (const testCase of [
   { packageSpec: '@floating-ui/dom@1.7.4', output: 'floating-ui.js', globalName: 'FloatingUI' },
 ]) {
   test(`bundles ${testCase.packageSpec} from the registry`, { skip: !networkEnabled }, async () => {
-    const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'mjs-to-js-network-test-'));
+    const cwd = await fs.mkdtemp(path.join(os.tmpdir(), 'mjs-to-browser-network-test-'));
     try {
       const result = await run({
         force: false,

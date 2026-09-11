@@ -9,7 +9,7 @@ const vm = require('node:vm');
 const { bundlePackage } = require('../../lib/bundle');
 
 async function fixtureProject(fixtureName) {
-  const projectDir = await fs.mkdtemp(path.join(os.tmpdir(), 'mjs-to-js-bundle-test-'));
+  const projectDir = await fs.mkdtemp(path.join(os.tmpdir(), 'mjs-to-browser-bundle-test-'));
   const packageDir = path.join(projectDir, 'node_modules', `fixture-${fixtureName}`);
   await fs.mkdir(path.dirname(packageDir), { recursive: true });
   await fs.cp(path.join(__dirname, '..', 'fixtures', fixtureName), packageDir, { recursive: true });

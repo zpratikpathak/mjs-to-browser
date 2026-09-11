@@ -43,7 +43,7 @@ test('reports useful npm failures', async () => {
 });
 
 test('removes the temporary project when installation fails', async () => {
-  const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'mjs-to-js-test-'));
+  const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'mjs-to-browser-test-'));
   const spawnImpl = () => childProcess({ code: 1 });
 
   await assert.rejects(() => installPackage('missing@1.0.0', { spawnImpl, tempRoot }));

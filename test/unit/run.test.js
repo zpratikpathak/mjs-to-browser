@@ -8,7 +8,7 @@ const test = require('node:test');
 const { run } = require('../../lib/run');
 
 async function workspace() {
-  return fs.mkdtemp(path.join(os.tmpdir(), 'mjs-to-js-run-test-'));
+  return fs.mkdtemp(path.join(os.tmpdir(), 'mjs-to-browser-run-test-'));
 }
 
 test('refuses an existing destination before installation', async () => {
