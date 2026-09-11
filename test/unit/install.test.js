@@ -42,6 +42,21 @@ test('reports useful npm failures', async () => {
   await assert.rejects(() => runNpm('missing@1.0.0', 'temp', { spawnImpl }), /package not found/);
 });
 
+test('reports a meaningful error when a registry package does not exist', async () => {
+  const spawnImpl = () => childProcess({
+    code: 1,
+    stderr: 'npm error code E404\nnpm error 404 Not Found - GET https://registry.npmjs.org/missing\n',
+  });
+
+  await assert.rejects(
+    () => runNpm('missing@latest', 'temp', { spawnImpl }),
+    {
+      message: 'Package "missing" was not found on the npm registry. Check the package name and try again.',
+      name: 'CliError',
+    },
+  );
+});
+
 test('removes the temporary project when installation fails', async () => {
   const tempRoot = await fs.mkdtemp(path.join(os.tmpdir(), 'mjs-to-browser-test-'));
   const spawnImpl = () => childProcess({ code: 1 });
