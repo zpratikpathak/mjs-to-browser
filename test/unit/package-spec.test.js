@@ -18,8 +18,17 @@ test('accepts exact registry versions including scopes and prereleases', () => {
   assert.equal(parsePackageSpec('@scope/my-lib@1.2.3-beta.1').version, '1.2.3-beta.1');
 });
 
+test('resolves bare registry package names through the latest tag', () => {
+  assert.deepEqual(parsePackageSpec('fuse.js'), {
+    name: 'fuse.js',
+    raw: 'fuse.js@latest',
+    version: 'latest',
+  });
+  assert.equal(parsePackageSpec('@scope/my-lib').raw, '@scope/my-lib@latest');
+});
+
 test('rejects non-exact and non-registry specs', () => {
-  for (const spec of ['fuse.js', 'fuse.js@latest', 'fuse.js@^7', 'github:user/repo', './local-package']) {
+  for (const spec of ['fuse.js@latest', 'fuse.js@*', 'fuse.js@^7', 'github:user/repo', './local-package']) {
     assert.throws(() => parsePackageSpec(spec), { name: 'UsageError' });
   }
 });

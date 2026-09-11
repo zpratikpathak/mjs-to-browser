@@ -49,6 +49,29 @@ test('force replaces output and cleans the temporary project', async () => {
   await fs.rm(cwd, { force: true, recursive: true });
 });
 
+test('installs the latest version when the package has no version', async () => {
+  const cwd = await workspace();
+  const tempDir = path.join(cwd, 'temporary-project');
+  await fs.mkdir(tempDir);
+  let installedSpec;
+
+  const result = await run(
+    { force: false, packageSpec: 'fixture' },
+    {
+      bundleImpl: async () => 'globalThis.Fixture = 42;',
+      cwd,
+      installImpl: async (packageSpec) => {
+        installedSpec = packageSpec;
+        return tempDir;
+      },
+    },
+  );
+
+  assert.equal(installedSpec, 'fixture@latest');
+  assert.equal(result.packageSpec.version, 'latest');
+  await fs.rm(cwd, { force: true, recursive: true });
+});
+
 test('cleans the temporary project after a bundle failure', async () => {
   const cwd = await workspace();
   const tempDir = path.join(cwd, 'temporary-project');

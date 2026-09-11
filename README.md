@@ -1,13 +1,13 @@
 # mjs-to-browser
 
-Bundle one exact npm package version into a minified browser script and expose its preferred export on `globalThis`.
+Bundle an npm package into a minified browser script and expose its preferred export on `globalThis`.
 
 ## Usage
 
 Run without installing globally:
 
 ```sh
-npx mjs-to-browser fuse.js@7.5.0
+npx mjs-to-browser fuse.js
 ```
 
 This creates `fuse.js.min.js` in the current directory and exposes `globalThis.Fuse`:
@@ -19,12 +19,18 @@ This creates `fuse.js.min.js` in the current directory and exposes `globalThis.F
 </script>
 ```
 
-Only exact npm registry versions are accepted. Tags, ranges, aliases, git URLs, remote tarballs, local paths, and workspace specs are rejected.
+When no version is specified, the latest version is used. You can also request an exact version:
+
+```sh
+npx mjs-to-browser fuse.js@7.5.0
+```
+
+Explicit tags, ranges, aliases, git URLs, remote tarballs, local paths, and workspace specs are rejected.
 
 ## Options
 
 ```text
-Usage: mjs-to-browser <name@exact-version> [options]
+Usage: mjs-to-browser <name[@exact-version]> [options]
 
 Options:
   -o, --output <path>  Output path (default: <package>.min.js)
