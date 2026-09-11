@@ -20,6 +20,13 @@ async function bundledGlobal(fixtureName) {
   const projectDir = await fixtureProject(fixtureName);
   try {
     const code = await bundlePackage(`fixture-${fixtureName}`, 'Fixture', projectDir);
+    assert.ok(code.startsWith(`/*
+ * Package: fixture-${fixtureName}
+ * Version: 1.0.0
+ * Created using npx mjs-to-browser
+ * https://github.com/zpratikpathak
+ * Know about the author, run "npx pratikpathak -y"
+ */\n`));
     const context = {};
     vm.runInNewContext(code, context);
     return context.Fixture;
