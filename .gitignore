@@ -1,0 +1,13 @@
+node_modules/
+.npm/
+*.log
+coverage/
+.DS_Store
+npm-debug.log*
+.vite/
+.tmp/
+tmp/
+*.tgz
+
+# Local generated bundle output
+*.min.js

@@ -1,0 +1,28 @@
+{
+  "name": "mjs-to-js",
+  "version": "1.0.0",
+  "description": "Bundle an exact npm package version into a browser-ready global script",
+  "license": "ISC",
+  "author": "Pratik Pathak",
+  "type": "commonjs",
+  "bin": {
+    "mjs-to-js": "bin/mjs-to-js.js"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test test/unit/*.test.js test/integration/*.test.js",
+    "test:network": "node --test test/network/registry.test.js"
+  },
+  "dependencies": {
+    "cross-spawn": "^7.0.6",
+    "esbuild": "^0.28.2",
+    "npm-package-arg": "^13.0.2"
+  }
+}
