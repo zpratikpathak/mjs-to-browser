@@ -81,3 +81,8 @@ The default suite is fully offline. Registry smoke tests are opt-in:
 ```sh
 MJS_TO_JS_NETWORK_TESTS=1 npm run test:network
 ```
+
+## Author
+
+- GitHub: [github.com/zpratikpathak](https://github.com/zpratikpathak/)
+- Website: [pratikpathak.com](https://pratikpathak.com)
