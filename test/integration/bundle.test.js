@@ -54,3 +54,18 @@ test('exposes a CommonJS module value', async () => {
 test('prefers the default export for mixed modules', async () => {
   assert.equal(await bundledGlobal('mixed'), 'preferred-default');
 });
+
+test('explains when an installed package has no usable entry point', async () => {
+  const projectDir = await fixtureProject('missing-entry');
+  try {
+    await assert.rejects(
+      () => bundlePackage('fixture-missing-entry', 'Fixture', projectDir),
+      {
+        message: 'Package "fixture-missing-entry" was installed, but it has no usable JavaScript entry point. Check that this is the intended npm package and that it supports browser bundling.',
+        name: 'CliError',
+      },
+    );
+  } finally {
+    await fs.rm(projectDir, { force: true, recursive: true });
+  }
+});
