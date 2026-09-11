@@ -1,6 +1,6 @@
 {
   "name": "mjs-to-browser",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "description": "Bundle an npm package into a browser-ready global script",
   "license": "ISC",
   "author": "Pratik Pathak",

@@ -95,20 +95,26 @@ test('cleans the temporary project after a bundle failure', async () => {
 test('cleans the temporary project after an output failure', async () => {
   const cwd = await workspace();
   const tempDir = path.join(cwd, 'temporary-project');
-  const blockedParent = path.join(cwd, 'not-a-directory');
   await fs.mkdir(tempDir);
-  await fs.writeFile(blockedParent, 'file');
 
   await assert.rejects(
     () => run(
-      { force: false, output: 'not-a-directory/bundle.js', packageSpec: 'fixture@1.0.0' },
+      { force: false, output: 'bundle.js', packageSpec: 'fixture@1.0.0' },
       {
         bundleImpl: async () => 'globalThis.Fixture = 42;',
         cwd,
+        fsImpl: {
+          access: fs.access,
+          mkdir: fs.mkdir,
+          rm: fs.rm,
+          writeFile: async () => {
+            throw Object.assign(new Error('write denied'), { code: 'EACCES' });
+          },
+        },
         installImpl: async () => tempDir,
       },
     ),
-    /Could not (inspect|write) output/,
+    /Could not write output/,
   );
   await assert.rejects(() => fs.access(tempDir), { code: 'ENOENT' });
   await fs.rm(cwd, { force: true, recursive: true });
