@@ -4,28 +4,47 @@ Bundle an npm package into a minified browser script and expose its preferred ex
 
 ## Usage
 
-Run without installing globally:
+Run against any browser-compatible npm package without installing this tool globally:
 
 ```sh
-npx mjs-to-browser fuse.js
+npx mjs-to-browser package-name
 ```
 
-This creates `fuse.js.min.js` in the current directory and exposes `globalThis.Fuse`:
+This creates `package-name.min.js` in the current directory. The package's default export, or its module namespace when no default exists, is exposed through an inferred global name:
 
 ```html
-<script src="./fuse.js.min.js"></script>
-<script>
-  const index = new Fuse(items, { keys: ['title'] });
-</script>
+<script src="./package-name.min.js"></script>
 ```
 
 When no version is specified, the latest version is used. You can also request an exact version:
 
 ```sh
-npx mjs-to-browser fuse.js@7.5.0
+npx mjs-to-browser package-name@1.2.3
 ```
 
 Explicit tags, ranges, aliases, git URLs, remote tarballs, local paths, and workspace specs are rejected.
+
+## Examples
+
+Bundle the latest Fuse.js release:
+
+```sh
+npx mjs-to-browser fuse.js
+# Creates fuse.js.min.js and exposes globalThis.Fuse
+```
+
+Bundle an exact version under a custom global name and output path:
+
+```sh
+npx mjs-to-browser package-name@1.2.3 -o "vendor/package.js" --global PackageAPI
+```
+
+Scoped package names produce filesystem-safe output names:
+
+```sh
+npx mjs-to-browser @scope/my-lib@1.2.3
+# Creates scope-my-lib.min.js and exposes globalThis.MyLib
+```
 
 ## Options
 
@@ -37,19 +56,6 @@ Options:
       --global <name>  Browser global name (inferred by default)
       --force          Replace an existing output file
   -h, --help           Show this help
-```
-
-Scoped package names produce filesystem-safe output names:
-
-```sh
-npx mjs-to-browser @scope/my-lib@1.2.3
-# Creates scope-my-lib.min.js and exposes globalThis.MyLib
-```
-
-Override either inferred value when a package uses different branding:
-
-```sh
-npx mjs-to-browser package-name@1.2.3 -o "vendor/package.js" --global PackageAPI
 ```
 
 Existing output files are never replaced unless `--force` is provided.
